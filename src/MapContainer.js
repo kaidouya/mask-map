@@ -1,35 +1,56 @@
-import React, { Component } from 'react';
-import GoogleMapReact from 'google-map-react';
-const API_KEY = `${process.env.REACT_APP_GOOGLE_MAP_API_KEY}`
+import React, { useState, useContext, useMemo } from 'react';
+import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import { makeStyles } from '@material-ui/core/styles';
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
-
-class SimpleMap extends Component {
-  static defaultProps = {
-    center: {
-      lat: 59.95,
-      lng: 30.33
+function getCurrentPosition() {
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      this.setState(preState => {
+        return {
+          ...preState,
+          center: {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude
+          }
+        };
+      });
     },
-    zoom: 11
-  };
-
-  render() {
-    return (
-      <div style={{ height: '100%', width: '100%' }}>
-        <GoogleMapReact
-          bootstrapURLKeys={{ key: API_KEY }}
-          defaultCenter={this.props.center}
-          defaultZoom={this.props.zoom}
-        >
-          <AnyReactComponent
-            lat={59.955413}
-            lng={30.337844}
-            text="My Marker"
-          />
-        </GoogleMapReact>
-      </div>
-    );
-  }
+    err => {
+      console.warn('ERROR(' + err.code + '): ' + err.message);
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    }
+  );
 }
 
-export default SimpleMap;
+const useStyles = makeStyles(theme => ({
+  leafletBox: {
+    width: '100%',
+    height: '100vh'
+  }
+}));
+
+const MapContainer = () => {
+  const clesses = useStyles();
+  const [initPosition, setinitPosition] = useState({});
+
+  return (
+    <Map
+      className={clesses.leafletBox}
+      center={[22.779538, 120.35217]}
+      zoom={12}
+      maxZoom={40}
+      duration={3}
+    >
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+        url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+      ></TileLayer>
+    </Map>
+  );
+};
+
+export default MapContainer;

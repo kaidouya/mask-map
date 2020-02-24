@@ -11,9 +11,13 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "gh-pages": "^2.2.0",
-    "google-map-react": "^1.1.6",
+    "immutability-helper": "^3.0.1",
+    "leaflet": "^1.6.0",
+    "leaflet.markercluster": "^1.4.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-leaflet": "^2.6.1",
+    "react-leaflet-markercluster": "^1.1.8",
     "react-scripts": "3.4.0"
   },
   "scripts": {
