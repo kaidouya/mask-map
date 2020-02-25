@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import BodyCOntainer from './BodyContainer'
+import React, { useEffect, useState } from 'react';
+import BodyCOntainer from './BodyContainer';
+import dataContext from './Store/dataContext';
 
 const sixSchoolApi =
   'https://raw.githubusercontent.com/kiang/pharmacies/master/json/points.json'
@@ -15,12 +16,14 @@ const App = () => {
 
   // 取得診所資料 + 使用者的定位資料
   useEffect(() => {
-    // fetchData(sixSchoolApi);
+    fetchData(sixSchoolApi);
   }, [])
 
   return (
     <>
-      <BodyCOntainer />
+      <dataContext.Provider value={storeList}>
+        <BodyCOntainer />
+      </dataContext.Provider>
     </>
   )
 }

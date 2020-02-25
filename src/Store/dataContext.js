@@ -1,3 +1,5 @@
 import React from 'react';
 
-export const { Provider, Consumer } = React.createContext({});
+const dataContext = React.createContext({});
+
+export default dataContext;

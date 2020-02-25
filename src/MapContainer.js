@@ -1,19 +1,17 @@
-import React, { useState, useContext, useMemo } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import { Map, TileLayer, Marker } from 'react-leaflet';
+import L from 'leaflet';
+import dataContext from './Store/dataContext';
+import MarkerBox from './MarkerBox';
 
-
-function getCurrentPosition() {
+function getCurrentPosition(setState) {
   navigator.geolocation.getCurrentPosition(
     pos => {
-      this.setState(preState => {
-        return {
-          ...preState,
-          center: {
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude
-          }
-        };
+      setState((presState) => {
+        return (
+          [pos.coords.latitude, pos.coords.longitude]
+        );
       });
     },
     err => {
@@ -34,14 +32,55 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const markerClusterObject = {
+  chunkedLoading: true,
+  removeOutsideVisibleBounds: true,
+  iconCreateFunction: function (cluster) {
+    const count = cluster.getChildCount()
+    let clusterSize = {
+      name: "small",
+      size: 30
+    }
+    if (count > 10) {
+      clusterSize.name = "medium"
+      clusterSize.size = 60
+    }
+    if (count > 50) {
+      clusterSize.name = "large"
+      clusterSize.size = 90
+    }
+    return new L.DivIcon({
+      html: count,
+      className: 'marker-cluster marker-cluster-' + clusterSize.name,
+      iconSize: null
+    })
+  }
+}
+
 const MapContainer = () => {
   const clesses = useStyles();
-  const [initPosition, setinitPosition] = useState({});
+  const [initPosition, setinitPosition] = useState([0, 0]);
+  const data = useContext(dataContext);
+
+  const markerClusterGroup = useMemo(() => {
+    return <MarkerBox setMarkerClusterObject={markerClusterObject}>
+      {data.map(({ geometry, properties }) => {
+        return <Marker position={[geometry.coordinates[1], geometry.coordinates[0]]} key={properties.id}>
+          {/* <MaskPopup {...properties} /> */}
+        </Marker>
+      })}
+    </MarkerBox>
+  }, [data])
+
+
+  useEffect(() => {
+    getCurrentPosition(setinitPosition);
+  }, []);
 
   return (
     <Map
       className={clesses.leafletBox}
-      center={[22.779538, 120.35217]}
+      center={initPosition}
       zoom={12}
       maxZoom={40}
       duration={3}
@@ -50,6 +89,9 @@ const MapContainer = () => {
         attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
         url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
       ></TileLayer>
+      {
+        true ? null : markerClusterGroup
+      }
     </Map>
   );
 };
