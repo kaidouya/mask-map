@@ -4,6 +4,7 @@ import { Map, TileLayer, Marker } from 'react-leaflet';
 import L from 'leaflet';
 import dataContext from './Store/dataContext';
 import MarkerBox from './MarkerBox';
+import './mapContainer.css';
 
 function getCurrentPosition(setState) {
   navigator.geolocation.getCurrentPosition(
@@ -32,7 +33,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const markerClusterObject = {
+const markerObjSetting = {
   chunkedLoading: true,
   removeOutsideVisibleBounds: true,
   iconCreateFunction: function (cluster) {
@@ -51,7 +52,7 @@ const markerClusterObject = {
     }
     return new L.DivIcon({
       html: count,
-      className: 'marker-cluster marker-cluster-' + clusterSize.name,
+      className: `marker-custom marker-custom-${clusterSize.name}`,
       iconSize: null
     })
   }
@@ -63,7 +64,7 @@ const MapContainer = () => {
   const data = useContext(dataContext);
 
   const markerClusterGroup = useMemo(() => {
-    return <MarkerBox setMarkerClusterObject={markerClusterObject}>
+    return <MarkerBox setting={markerObjSetting}>
       {data.map(({ geometry, properties }) => {
         return <Marker position={[geometry.coordinates[1], geometry.coordinates[0]]} key={properties.id}>
           {/* <MaskPopup {...properties} /> */}
@@ -89,9 +90,7 @@ const MapContainer = () => {
         attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
         url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
       ></TileLayer>
-      {
-        true ? null : markerClusterGroup
-      }
+      {markerClusterGroup}
     </Map>
   );
 };

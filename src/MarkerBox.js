@@ -5,9 +5,9 @@ import "leaflet.markercluster/dist/MarkerCluster.Default.css"
 import L from 'leaflet'
 
 class MarkerClusterGroup extends MapLayer {
-  createLeafletElement({ children, leaflet: { map }, setMarkerClusterObject }) {
+  createLeafletElement({ children, leaflet: { map }, setting }) {
 
-    const markerClusterGroup = new L.markerClusterGroup(setMarkerClusterObject)
+    const markerClusterGroup = new L.markerClusterGroup(setting)
     this.contextValue = { layerContainer: markerClusterGroup, map }
 
     return markerClusterGroup
