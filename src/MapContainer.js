@@ -5,6 +5,7 @@ import L from 'leaflet';
 import dataContext from './Store/dataContext';
 import MarkerBox from './MarkerBox';
 import './mapContainer.css';
+import MaskDetail from './MaskDetail';
 
 function getCurrentPosition(setState) {
   navigator.geolocation.getCurrentPosition(
@@ -29,7 +30,7 @@ function getCurrentPosition(setState) {
 const useStyles = makeStyles(theme => ({
   leafletBox: {
     width: '100%',
-    height: '100vh'
+    height: '100%'
   }
 }));
 
@@ -67,7 +68,7 @@ const MapContainer = () => {
     return <MarkerBox setting={markerObjSetting}>
       {data.map(({ geometry, properties }) => {
         return <Marker position={[geometry.coordinates[1], geometry.coordinates[0]]} key={properties.id}>
-          {/* <MaskPopup {...properties} /> */}
+          <MaskDetail {...properties} />
         </Marker>
       })}
     </MarkerBox>
@@ -90,7 +91,7 @@ const MapContainer = () => {
         attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
         url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
       ></TileLayer>
-      {markerClusterGroup}
+      {/* {data ? markerClusterGroup : null} */}
     </Map>
   );
 };

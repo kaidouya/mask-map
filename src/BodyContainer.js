@@ -14,21 +14,19 @@ import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems, secondaryListItems } from './listItems';
-import Orders from './Orders';
 import MapContainer from './MapContainer';
+import SearchArea from './SearchArea';
+
 
 function Copyright() {
   return (
     <Typography variant='body2' color='textSecondary' align='center'>
       {'Copyright © '}
-      <Link color='inherit' href='https://material-ui.com/'>
-        Your Website
-      </Link>{' '}
+      kaidouya test
+      {' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
@@ -97,13 +95,20 @@ const useStyles = makeStyles(theme => ({
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
+    display: 'flex',
+    flexDirection: 'column',
     flexGrow: 1,
     height: '100vh',
     overflow: 'auto'
   },
   container: {
+    flex: '1 0 auto',
     paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4)
+    paddingBottom: theme.spacing(4),
+    overflow: 'hidden',
+  },
+  innerConatiner: {
+    height: '100%',
   },
   paper: {
     padding: theme.spacing(2),
@@ -113,7 +118,7 @@ const useStyles = makeStyles(theme => ({
   },
   fixedHeight: {
     position: 'relative',
-    height: 600,
+    height: '100%',
     overflow: 'hidden',
   }
 }));
@@ -177,15 +182,12 @@ export default memo(function Stage() {
             <ChevronLeftIcon />
           </IconButton>
         </div>
-        <Divider />
-        <List>{mainListItems}</List>
-        <Divider />
-        <List>{secondaryListItems}</List>
+        <SearchArea />
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth='lg' className={classes.container}>
-          <Grid container spacing={3}>
+          <Grid container className={classes.innerConatiner} spacing={3}>
             {/* map */}
             <Grid item xs={12}>
               <Paper className={fixedHeightPaper}>
@@ -193,13 +195,8 @@ export default memo(function Stage() {
               </Paper>
             </Grid>
             {/* Recent Orders */}
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Orders />
-              </Paper>
-            </Grid>
           </Grid>
-          <Box pt={4}>
+          <Box pt={2}>
             <Copyright />
           </Box>
         </Container>
