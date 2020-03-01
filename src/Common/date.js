@@ -25,7 +25,7 @@ function getCurrentChineseWeek() {
   let today = date.getDay(); // is 0~6 Sunday ~ staturday
   return today !== 0
     ? `${weekList[today - 1]}`
-    : `${weekList[weekList.length]}`;
+    : `${weekList[weekList.length - 1]}`;
 }
 
 export { getCurrentDate, getCurrentChineseWeek };
